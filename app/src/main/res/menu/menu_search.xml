@@ -11,6 +11,7 @@
 
     <item
         android:id="@+id/menu_location"
+        android:icon="@drawable/ic_edit_location_24dp"
         android:title="location"
         app:showAsAction="always"/>
 

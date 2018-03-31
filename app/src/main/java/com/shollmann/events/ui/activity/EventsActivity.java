@@ -3,6 +3,7 @@ package com.shollmann.events.ui.activity;
 import android.Manifest;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -29,7 +30,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.shollmann.events.R;
 import com.shollmann.events.api.EventbriteApi;
 import com.shollmann.events.api.baseapi.CallId;
@@ -74,6 +80,8 @@ public class EventsActivity extends AppCompatActivity implements SearchView.OnQu
     private PaginatedEvents lastPageLoaded;
     private String currentQuery;
     private CallId getEventsCallId;
+
+    public static int PLACE_PICKER_REQUEST = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -230,11 +238,31 @@ public class EventsActivity extends AppCompatActivity implements SearchView.OnQu
         switch (item.getItemId()) {
             case R.id.menu_location:
                 resetSearch();
-                getEvents(30.055245, 31.2901943);
-                Log.d(TAG, "onOptionsItemSelected getEvents()");
+                try {
+                    startActivityForResult(new PlacePicker.IntentBuilder().build(this), PLACE_PICKER_REQUEST);
+                } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
+                    Log.e(TAG, "onOptionsItemSelected: ", e);
+                }
                 return true;
         }
         return false;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PLACE_PICKER_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlacePicker.getPlace(this, data);
+                if (place != null) {
+                    getEvents(location.getLatitude(), location.getLongitude());
+                    Log.d(TAG, "onOptionsItemSelected getEvents()");
+                } else {
+                    Toast.makeText(EventsActivity.this, "Error", Toast.LENGTH_LONG).show();
+                }
+            }
+
+        }
     }
 
     @Override
