@@ -19,7 +19,7 @@ public class EventbriteApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        this.instance = this;
+        instance = this;
         this.apiEventbrite = (EventbriteApi) new EventbriteApi.Builder()
                 .baseUrl(Constants.EventbriteApi.URL)
                 .contract(EventbriteApiContract.class)

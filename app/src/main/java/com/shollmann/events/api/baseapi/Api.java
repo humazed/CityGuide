@@ -51,7 +51,7 @@ public class Api<T> {
                 .writeTimeout(timeOut, TimeUnit.SECONDS)
                 .addInterceptor(interceptorLogging)
                 .addInterceptor(generateDefaultInterceptor())
-                .cache(createHttpCache(cacheSize))
+//                .cache(createHttpCache(cacheSize))
                 .build();
 
         Retrofit retrofit = new Retrofit.Builder()

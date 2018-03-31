@@ -21,6 +21,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,9 +48,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,6 +56,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class EventsActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
+    private static final String TAG = EventsActivity.class.getSimpleName();
+
     private static final int NO_FLAGS = 0;
     private static final int ACCESS_COARSE_LOCATION_PERMISSION_REQUEST = 7001;
 
@@ -75,15 +75,6 @@ public class EventsActivity extends AppCompatActivity implements SearchView.OnQu
     private String currentQuery;
     private CallId getEventsCallId;
 
-    public static double getShorterCoordinate(double coordinate) {
-        DecimalFormatSymbols dfs = new DecimalFormatSymbols();
-        dfs.setDecimalSeparator('.');
-
-        DecimalFormat decimalFormat = new DecimalFormat(Constants.COORDINATES_FORMAT, dfs);
-
-        return Double.parseDouble(decimalFormat.format(coordinate));
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,13 +86,14 @@ public class EventsActivity extends AppCompatActivity implements SearchView.OnQu
         setupToolbar();
         setupRecyclerView();
         checkForLocationPermission();
+
+
     }
 
     private void setupRecyclerView() {
         recyclerEvents.setHasFixedSize(true);
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerEvents.setLayoutManager(layoutManager);
+        recyclerEvents.setLayoutManager(new LinearLayoutManager(this));
         eventAdapter = new EventAdapter(new ArrayList<Event>());
         recyclerEvents.setAdapter(eventAdapter);
 
@@ -130,27 +122,42 @@ public class EventsActivity extends AppCompatActivity implements SearchView.OnQu
         }
     }
 
-
     private void getEvents(String query) {
         Snackbar.make(coordinatorLayout, R.string.getting_events, Snackbar.LENGTH_SHORT).show();
         getEventsCallId = new CallId(CallOrigin.HOME, CallType.GET_EVENTS);
         Callback<PaginatedEvents> callback = generateGetEventsCallback();
         eventbriteApi.registerCallback(getEventsCallId, callback);
-        try {
-            eventbriteApi.getEvents(query, getShorterCoordinate(37.773972), getShorterCoordinate(-122.431297
-            ), lastPageLoaded, getEventsCallId, callback);
-        } catch (IOException e) {
-            //TODO
-            e.printStackTrace();
-        }
+
+        eventbriteApi.getEvents(query, 0, 0,
+                lastPageLoaded, getEventsCallId, callback);
         PreferencesHelper.setLastSearch(query);
+    }
+
+    private void getEvents(double lat, double lon) {
+        Log.d(TAG, "getEvents() called with: " + "lat = [" + lat + "], lon = [" + lon + "]");
+        Snackbar.make(coordinatorLayout, R.string.getting_events, Snackbar.LENGTH_SHORT).show();
+        getEventsCallId = new CallId(CallOrigin.HOME, CallType.GET_EVENTS_BY_LOCATION);
+        Callback<PaginatedEvents> callback = generateGetEventsCallback();
+        eventbriteApi.registerCallback(getEventsCallId, callback);
+
+        eventbriteApi.getEventsWithLocation(lat, lon, lastPageLoaded, getEventsCallId, callback);
+
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .baseUrl("https://api.github.com/")
+//                .build();
+//
+//        EventbriteApiContract api = retrofit.create(EventbriteApiContract.class);
+//https://www.eventbriteapi.com/v3/events/search/?location.latitude=30.055245&location.longitude=31.2901943&token=VBEQ2ZP7SOEWDHH3PVOI
+//https://www.eventbriteapi.com/v3/events/search/?location.latitude=30.055245&location.longitude=31.2901943&token=VBEQ2ZP7SOEWDHH3PVOI
+//        PreferencesHelper.setLastSearch("");
+//        eventAdapter.notifyDataSetChanged();
     }
 
     private Callback<PaginatedEvents> generateGetEventsCallback() {
         return new Callback<PaginatedEvents>() {
-
             @Override
             public void onResponse(Call<PaginatedEvents> call, Response<PaginatedEvents> response) {
+                Log.d(TAG, "onResponse() called with: " + "call = [" + call + "], response = [" + response.body().getEvents() + "]");
                 PaginatedEvents paginatedEvents = response.body();
                 if (paginatedEvents.getEvents().isEmpty()) {
                     eventAdapter.setKeepLoading(false);
@@ -181,11 +188,11 @@ public class EventsActivity extends AppCompatActivity implements SearchView.OnQu
     }
 
     private void findViews() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        txtNoResults = (TextView) findViewById(R.id.home_txt_no_results);
-        txtWaitForResults = (TextView) findViewById(R.id.home_txt_wait_first_time);
-        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.home_coordinator_layout);
-        recyclerEvents = (RecyclerView) findViewById(R.id.home_events_recycler);
+        toolbar = findViewById(R.id.toolbar);
+        txtNoResults = findViewById(R.id.home_txt_no_results);
+        txtWaitForResults = findViewById(R.id.home_txt_wait_first_time);
+        coordinatorLayout = findViewById(R.id.home_coordinator_layout);
+        recyclerEvents = findViewById(R.id.home_events_recycler);
     }
 
     private void setupTaskDescription() {
@@ -199,17 +206,35 @@ public class EventsActivity extends AppCompatActivity implements SearchView.OnQu
 
     @Override
     public boolean onPrepareOptionsMenu(final Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_search, menu);
+//        getMenuInflater().inflate(R.menu.menu_search, menu);
         menuSearch = menu.findItem(R.id.search);
         searchView = (SearchView) MenuItemCompat.getActionView(menuSearch);
-        EditText edtSearch = (EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-        ImageView searchClose = (ImageView) searchView.findViewById(android.support.v7.appcompat.R.id.search_close_btn);
+        EditText edtSearch = searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        ImageView searchClose = searchView.findViewById(android.support.v7.appcompat.R.id.search_close_btn);
         searchClose.setImageResource(R.drawable.ic_action_close);
         edtSearch.setTextColor(Color.WHITE);
         edtSearch.setHintTextColor(Color.WHITE);
         searchView.setOnQueryTextListener(this);
 
         return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_search, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_location:
+                resetSearch();
+                getEvents(30.055245, 31.2901943);
+                Log.d(TAG, "onOptionsItemSelected getEvents()");
+                return true;
+        }
+        return false;
     }
 
     @Override

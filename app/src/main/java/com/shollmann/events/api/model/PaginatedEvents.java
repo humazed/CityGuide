@@ -22,4 +22,12 @@ public class PaginatedEvents implements Serializable {
     public void setEvents(List<Event> events) {
         this.events = events;
     }
+
+    @Override
+    public String toString() {
+        return "PaginatedEvents{" +
+                "pagination=" + pagination +
+                ", events=" + events +
+                '}';
+    }
 }

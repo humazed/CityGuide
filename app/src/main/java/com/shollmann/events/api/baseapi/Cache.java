@@ -41,7 +41,7 @@ public class Cache {
         ANY_CACHE_THEN_NETWORK,
 
         ///Always use network call, but if that fails, then check if any cache is available and return it
-        NETWORK_ELSE_ANY_CACHE;
+        NETWORK_ELSE_ANY_CACHE
     }
 
     public static final class Builder {

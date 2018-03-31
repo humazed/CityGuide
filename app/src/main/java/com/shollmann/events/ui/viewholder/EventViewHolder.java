@@ -19,11 +19,11 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
 
     public EventViewHolder(View view) {
         super(view);
-        txtTitle = (TextView) view.findViewById(R.id.event_txt_title);
-        txtDate = (TextView) view.findViewById(R.id.event_txt_date);
-        txtIsFree = (TextView) view.findViewById(R.id.event_txt_address);
-        txtTitle = (TextView) view.findViewById(R.id.event_txt_title);
-        imgCover = (ImageView) view.findViewById(R.id.event_img_cover);
+        txtTitle = view.findViewById(R.id.event_txt_title);
+        txtDate = view.findViewById(R.id.event_txt_date);
+        txtIsFree = view.findViewById(R.id.event_txt_address);
+        txtTitle = view.findViewById(R.id.event_txt_title);
+        imgCover = view.findViewById(R.id.event_img_cover);
         return;
     }
 
