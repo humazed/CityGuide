@@ -43,4 +43,7 @@ dependencies {
     implementation "com.google.android.gms:play-services-places:9.8.0"
     implementation "com.google.android.gms:play-services-maps:9.8.0"
 
+    implementation 'saschpe.android:customtabs:1.1.1'
+
+
 }

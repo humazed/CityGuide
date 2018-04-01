@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Events</string>
+    <string name="app_name">Riyadh City Guide</string>
     <string name="error_getting_events">Sorry, there was an error getting the events close to you :(</string>
     <string name="getting_events">Fetching events...</string>
     <string name="menu_search">Search</string>

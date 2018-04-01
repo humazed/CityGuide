@@ -14,8 +14,8 @@ public interface EventbriteApiContract {
             @Query("location.longitude") double longitude,
 //            @Query("categories") String categories,
             @Query("page") int pageNumber);
-
-    @GET("/v3/events/search/?location.within=100km&organizer.id=17145795263")
+//&organizer.id=17145795263
+    @GET("/v3/events/search/?location.within=100km")
     Call<PaginatedEvents> getEventsWithLocation(
             @Query("location.latitude") double latitude,
             @Query("location.longitude") double longitude,

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background"
-    android:orientation="vertical">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/background"
+              android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -13,7 +13,7 @@
         android:background="@color/colorPrimary"
         android:title="@string/app_name"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:titleTextColor="@color/white" />
+        app:titleTextColor="@color/white"/>
 
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/home_coordinator_layout"
@@ -31,7 +31,7 @@
             android:paddingRight="@dimen/medium_space"
             android:paddingTop="@dimen/medium_space"
             android:visibility="visible"
-            app:layout_behavior="com.shollmann.events.ui.behavior.DefaultCoordinatorLayoutBehavior" />
+            app:layout_behavior="com.shollmann.events.ui.behavior.DefaultCoordinatorLayoutBehavior"/>
 
 
         <TextView
@@ -46,7 +46,7 @@
             android:padding="@dimen/large_space"
             android:text="@string/no_results_for_that_location"
             android:textSize="@dimen/text_material_header"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/home_txt_wait_first_time"
@@ -59,6 +59,14 @@
             android:padding="@dimen/large_space"
             android:text="@string/home_tell_us_what_you_are_looking_for"
             android:textSize="@dimen/text_material_header"
-            android:visibility="gone" />
+            android:visibility="gone"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/add_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_add_24dp"/>
     </android.support.design.widget.CoordinatorLayout>
 </LinearLayout>

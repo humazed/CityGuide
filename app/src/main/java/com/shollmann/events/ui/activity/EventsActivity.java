@@ -10,8 +10,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -60,6 +62,8 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import saschpe.android.customtabs.CustomTabsHelper;
+import saschpe.android.customtabs.WebViewFallback;
 
 public class EventsActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
     private static final String TAG = EventsActivity.class.getSimpleName();
@@ -95,6 +99,26 @@ public class EventsActivity extends AppCompatActivity implements SearchView.OnQu
         setupRecyclerView();
         checkForLocationPermission();
 
+
+        findViewById(R.id.add_fab).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder()
+                        .addDefaultShareMenuItem()
+                        .setToolbarColor(getResources().getColor(R.color.colorPrimary))
+                        .setShowTitle(true)
+                        .build();
+
+                // This is optional but recommended
+                CustomTabsHelper.addKeepAliveExtra(EventsActivity.this, customTabsIntent.intent);
+
+                // This is where the magic happens...
+                CustomTabsHelper.openCustomTab(EventsActivity.this, customTabsIntent,
+                        Uri.parse("https://www.eventbrite.com/create"),
+                        new WebViewFallback());
+
+            }
+        });
 
     }
 
