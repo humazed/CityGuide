@@ -189,7 +189,7 @@ public class EventsActivity extends AppCompatActivity implements SearchView.OnQu
         return new Callback<PaginatedEvents>() {
             @Override
             public void onResponse(Call<PaginatedEvents> call, Response<PaginatedEvents> response) {
-                Log.d(TAG, "onResponse() called with: " + "call = [" + call + "], response = [" + response.body().getEvents() + "]");
+//                Log.d(TAG, "onResponse() called with: " + "call = [" + call + "], response = [" + response.body().getEvents() + "]");
                 PaginatedEvents paginatedEvents = response.body();
                 if (paginatedEvents.getEvents().isEmpty()) {
                     eventAdapter.setKeepLoading(false);
