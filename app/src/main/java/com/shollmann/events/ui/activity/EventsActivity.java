@@ -48,6 +48,7 @@ import com.shollmann.events.api.model.PaginatedEvents;
 import com.shollmann.events.helper.Constants;
 import com.shollmann.events.helper.PreferencesHelper;
 import com.shollmann.events.helper.ResourcesHelper;
+import com.shollmann.events.sql.DatabaseHelper;
 import com.shollmann.events.ui.EventbriteApplication;
 import com.shollmann.events.ui.adapter.EventAdapter;
 import com.shollmann.events.ui.event.LoadMoreEvents;
@@ -91,6 +92,12 @@ public class EventsActivity extends AppCompatActivity implements SearchView.OnQu
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        if (new DatabaseHelper(this).getAllUser().isEmpty()) {
+            startActivity(new Intent(this, LoginActivity.class));
+        }
+
+
         eventbriteApi = EventbriteApplication.getApplication().getApiEventbrite();
 
         findViews();

@@ -20,6 +20,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testImplementation 'junit:junit:4.12'
     implementation 'com.android.support:support-v4:27.1.0'
     implementation "com.android.support:appcompat-v7:$support_version"
@@ -44,6 +45,15 @@ dependencies {
     implementation "com.google.android.gms:play-services-maps:9.8.0"
 
     implementation 'saschpe.android:customtabs:1.1.1'
+
+
+    implementation "android.arch.persistence.room:runtime:$room_version"
+    annotationProcessor "android.arch.persistence.room:compiler:$room_version"
+
+    compile 'com.hendiware.utils:futils:1.6.91'
+
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
 
 }
