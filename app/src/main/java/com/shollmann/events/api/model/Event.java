@@ -392,4 +392,44 @@ public class Event {
         this.logo = logo;
     }
 
+    @Override
+    public String toString() {
+        return "Event{" +
+                "name=" + name +
+                ", description=" + description +
+                ", id='" + id + '\'' +
+                ", url='" + url + '\'' +
+                ", vanityUrl='" + vanityUrl + '\'' +
+                ", start=" + start +
+                ", end=" + end +
+                ", created='" + created + '\'' +
+                ", changed='" + changed + '\'' +
+                ", capacity=" + capacity +
+                ", capacityIsCustom=" + capacityIsCustom +
+                ", status='" + status + '\'' +
+                ", currency='" + currency + '\'' +
+                ", listed=" + listed +
+                ", shareable=" + shareable +
+                ", onlineEvent=" + onlineEvent +
+                ", txTimeLimit=" + txTimeLimit +
+                ", hideStartDate=" + hideStartDate +
+                ", hideEndDate=" + hideEndDate +
+                ", locale='" + locale + '\'' +
+                ", isLocked=" + isLocked +
+                ", privacySetting='" + privacySetting + '\'' +
+                ", isSeries=" + isSeries +
+                ", isSeriesParent=" + isSeriesParent +
+                ", isReservedSeating=" + isReservedSeating +
+                ", source='" + source + '\'' +
+                ", isFree=" + isFree +
+                ", logoId='" + logoId + '\'' +
+                ", organizerId='" + organizerId + '\'' +
+                ", venueId='" + venueId + '\'' +
+                ", categoryId='" + categoryId + '\'' +
+                ", subcategoryId='" + subcategoryId + '\'' +
+                ", formatId='" + formatId + '\'' +
+                ", resourceUri='" + resourceUri + '\'' +
+                ", logo=" + logo +
+                '}';
+    }
 }

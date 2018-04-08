@@ -133,7 +133,7 @@ public class EventsActivity extends AppCompatActivity implements SearchView.OnQu
         recyclerEvents.setHasFixedSize(true);
 
         recyclerEvents.setLayoutManager(new LinearLayoutManager(this));
-        eventAdapter = new EventAdapter(new ArrayList<Event>());
+        eventAdapter = new EventAdapter(EventsActivity.this, new ArrayList<Event>());
         recyclerEvents.setAdapter(eventAdapter);
 
         recyclerEvents.setVisibility(View.GONE);
@@ -167,8 +167,7 @@ public class EventsActivity extends AppCompatActivity implements SearchView.OnQu
         Callback<PaginatedEvents> callback = generateGetEventsCallback();
         eventbriteApi.registerCallback(getEventsCallId, callback);
 
-        eventbriteApi.getEvents(query, 0, 0,
-                lastPageLoaded, getEventsCallId, callback);
+        eventbriteApi.getEvents(query, 0, 0, lastPageLoaded, getEventsCallId, callback);
         PreferencesHelper.setLastSearch(query);
     }
 
